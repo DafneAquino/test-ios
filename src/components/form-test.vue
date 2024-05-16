@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <label for="story">Description:</label>
 
   <br/>
@@ -141,4 +141,67 @@ export default {
   },
 }
 </script>
+ -->
+ 
+ <template>
+  <div>
+    <h1>Contador de salidas de pestaña</h1>
+    <p>El usuario ha salido de la pestaña {{ leaveCount }} veces.</p>
+    <button type="button" @click="focusSubmitButton">OK</button>
+    <button type="button" ref="submitButton">Submit</button>
+  </div>
+</template>
 
+<script>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+
+export default {
+  name: 'VisibilityCounter',
+  setup() {
+    const leaveCount = ref(0);
+    const submitButton = ref(null);
+
+    const handleBlur = () => {
+      leaveCount.value++;
+    };
+
+    const focusSubmitButton = () => {
+      if (submitButton.value) {
+        submitButton.value.focus();
+      }
+    };
+
+    onMounted(() => {
+      window.addEventListener('blur', handleBlur);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('blur', handleBlur);
+    });
+
+    return {
+      leaveCount,
+      submitButton,
+      focusSubmitButton
+    };
+  }
+};
+</script>
+
+<style scoped>
+h1 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+p {
+  font-size: 18px;
+}
+
+button {
+  margin: 8px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
